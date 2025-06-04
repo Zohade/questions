@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\Console\Question\Question;
+use App\Models\question;
 
 class option extends Model
 {

@@ -28,7 +28,7 @@
                                 name="answer{{ $question->reponse_unique ? '' : '[]' }}"
                                 value="{{ $option->id }}"
                                 {{ in_array($option->id, session('last_user_answers', [])) ? 'checked' : '' }}>
-                                {{ $option->libele }}
+                                  {{$option->libele }}
                             </label>
                         </li>
                         @endforeach
@@ -60,7 +60,7 @@
 
     <script>
         document.getElementById('answers-form').addEventListener('submit', function (e) {
-            const inputs = document.querySelectorAll('input[name="answer"]:checked');
+            const inputs = document.querySelectorAll('input[name^="answer"]:checked');
             if (inputs.length === 0) {
                 alert('Please select at least one option.');
                 e.preventDefault();

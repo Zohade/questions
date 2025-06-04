@@ -13,56 +13,56 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //initialistion des sessions
-        session([
-            'feedback' => '' ,
-            'is_correct' => '',
-            'correct_answers' => [],
-            'last_user_answers' => [],
-        ]);
-        //compte du nombre total de questions
-        $total = Question::count();
-        session(['nbre_question' => $total]);
-        //récuperation de la première question
-        $question = Question::first();
-        session(['current_question' => $question->id]);
-        //récuperation des options
-        $options = Option::where(['question_id' => $question->id])->get();
-
-        //initialisation du score du joueur
-        session(['score' => 0]);
-        return view('question', compact(['question', 'options']));
+        $questions = Question::with([
+            'options' => function ($query) {
+                $query->inRandomOrder();
+            }
+        ])->inRandomOrder()->take(10)->get();
+        session(['questions' => $questions]);
+        return view('welcome', compact(['questions']));
 
     }
     public function checkAnswers(Request $request)
     {
-        $selected = $request->input('answer');
-        $selected = is_array($selected) ? $selected : [$selected];
+        $userInputAnswers = $request->input('answers', []);
+        $questions = session()->get('questions');
 
-        $questionId = session()->get('current_question');
-        $question = Question::with('options')->findOrFail($questionId);
+        $totalCorrect = 0;
 
-        $correctOptionIds = $question->options->where('is_true', true)->pluck('id')->toArray();
+        foreach ($questions as $key => &$question) {
+            $question['user_answers'] = $userInputAnswers[$question['id']] ?? [];
 
-        $isCorrect = count(array_diff($selected, $correctOptionIds)) === 0 &&
-                     count(array_diff($correctOptionIds, $selected)) === 0;
+            if (!is_array($question['user_answers'])) {
+                $question['user_answers'] = [$question['user_answers']];
+            }
+            $correctOptionIds = collect($question['options'])
+            ->filter(fn($opt) => $opt->is_true)
+            ->pluck('id')
+            ->map(fn($id) => (int) $id)
+            ->sort()
+            ->values();
 
-        if ($isCorrect) {
-            session(['score' => session('score', 0) + 1]);
+            $userOptionIds = collect($question['user_answers'])
+                ->map(fn($id) => (int) $id)
+                ->sort()
+                ->values();
+
+            $isCorrect = $correctOptionIds->toArray() === $userOptionIds->toArray();
+
+            if ($isCorrect) {
+                $totalCorrect++;
+            }
+
+            foreach ($question['options'] as &$option) {
+                $option['is_user_selected'] = in_array($option['id'], $question['user_answers']);
+            }
         }
 
-        session([
-            'feedback' => $isCorrect ? 'Correct!' : 'Wrong!',
-            'is_correct' => $isCorrect,
-            'correct_answers' => $correctOptionIds,
-            'last_user_answers' => $selected,
-        ]);
+        $score = round(($totalCorrect / 10) * 100);
 
-        if($questionId==session()->get('nbre_question')){
-            return to_route('score');
-        }
-        return redirect()->route('show-question', ['id' => $questionId]);
+        return view('score', compact('questions', 'score'));
     }
+
 
     public function next(){
         session([

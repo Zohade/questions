@@ -4,8 +4,8 @@ use App\Http\Controllers\QuestionController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/',[QuestionController::class,'index'])->name('question');
+//Route::get('/',[QuestionController::class,'index'])->name('question');
+Route::get('/', [QuestionController::class,'index'])->name('index');
 Route::post('/quiz-soumission', [QuestionController::class, 'checkAnswers'])->name('soumission');
-Route::get('next-quiz', [QuestionController::class, 'next'])->name('next-quiz');
-Route::get('/quiz/{id}', [QuestionController::class, 'show'])->name('show-question');
-Route::get('/score', [QuestionController::class, 'showScore'])->name('score');
+//Route::get('/quiz-answers', [QuestionController::class, 'next'])->name('quiz-answers');
+// Route::get('/score', [QuestionController::class, 'showScore'])->name('score');
