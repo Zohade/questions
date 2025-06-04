@@ -17,7 +17,7 @@ Voici les étapes pour installer et lancer le projet en local :
 ### 1. Cloner le dépôt
 
 ```bash
-git clone <URL_DU_DEPOT>
+git clone https://github.com/Zohade/questions.git
 cd questions
 ```
 
