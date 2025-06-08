@@ -42,9 +42,10 @@ label:hover {
     color: white;
     border: none;
     border-radius: 5px;
-    cursor: not-allowed;
+    cursor: pointer;
     opacity: 0.6;
     transition: opacity 0.3s, cursor 0.3s;
+    text-decoration: none;
 }
 
 #submitBtn:enabled {
@@ -92,4 +93,40 @@ label {
     padding: 0.3rem;
     border-radius: 4px;
     font-size: 1rem;
+}
+
+#chrono {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #222;
+    color: #fff;
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    padding: 1rem 0;
+    z-index: 9998;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#chrono #minutes,
+#chrono #secondes {
+    display: inline-block;
+}
+
+@keyframes clignote {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.clignotant {
+    animation: clignote 1s infinite;
 }

@@ -48,6 +48,6 @@
     <?php $i++;?>
 @endforeach
 
-<a href="{{ route('index') }}">Retry</a>
+<a href="{{ route('index') }}" id="submitBtn">Retry</a>
 </body>
 </html>

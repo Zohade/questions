@@ -19,7 +19,7 @@ class QuestionController extends Controller
             }
         ])->inRandomOrder()->take(10)->get();
         session(['questions' => $questions]);
-        return view('welcome', compact(['questions']));
+        return view('question', compact(['questions']));
 
     }
     public function checkAnswers(Request $request)
