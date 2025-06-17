@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('options', function (Blueprint $table) {
             $table->id();
-            $table->string('libele');
+            $table->text('libele');
             $table->boolean('is_true');
+            $table->text("explanation")->nullable();
             $table->foreignId('question_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();
         });

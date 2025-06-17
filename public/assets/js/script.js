@@ -1,4 +1,5 @@
-const endTime = new Date(new Date().getTime() + 10 * 60 * 1000);
+const TIMEOUT = 3;
+const endTime = new Date(new Date().getTime() + TIMEOUT * 60 * 1000);
 const form = document.getElementById("quizForm");
 let soundPlayed = false;
 let lastBeepTime = 0;
